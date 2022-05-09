@@ -19,9 +19,11 @@ class Products with ChangeNotifier {
     return _items.firstWhere((element) => element.id == id);
   }
 
+  String token;
+  Products(this.token, this._items);
   Future<void> addAndFetchProducts() async {
     final url = Uri.parse(
-        'https://shop-app-b8310-default-rtdb.firebaseio.com/products.json');
+        'https://shop-app-b8310-default-rtdb.firebaseio.com/products.json?auth=$token');
     try {
       final response = await http.get(url);
       print(json.decode(response.body));
@@ -47,7 +49,7 @@ class Products with ChangeNotifier {
 
   Future<void> addProduct(Product _newProduct) async {
     final url = Uri.parse(
-        'https://shop-app-b8310-default-rtdb.firebaseio.com/products.json');
+        'https://shop-app-b8310-default-rtdb.firebaseio.com/products.json?auth=$token');
     try {
       final response = await http.post(
         url,
@@ -78,7 +80,7 @@ class Products with ChangeNotifier {
     final prodIndex = _items.indexWhere((element) => element.id == id);
     if (prodIndex >= 0) {
       final url = Uri.parse(
-          'https://shop-app-b8310-default-rtdb.firebaseio.com/products/$id.json');
+          'https://shop-app-b8310-default-rtdb.firebaseio.com/products/$id.json?auth=$token');
       await http.patch(url,
           body: json.encode({
             'title': newProduct.title,
@@ -95,7 +97,7 @@ class Products with ChangeNotifier {
 
   Future<void> markAsFav(String id, bool currentStatus) async {
     final url = Uri.parse(
-        'https://shop-app-b8310-default-rtdb.firebaseio.com/products/$id.json');
+        'https://shop-app-b8310-default-rtdb.firebaseio.com/products/$id.json?auth=$token');
     await http.patch(
       url,
       body: json.encode(
@@ -111,7 +113,7 @@ class Products with ChangeNotifier {
 
   void removeProducts(String id) {
     final url = Uri.parse(
-        'https://shop-app-b8310-default-rtdb.firebaseio.com/products/$id.json');
+        'https://shop-app-b8310-default-rtdb.firebaseio.com/products/$id.json?auth=$token');
     final existingProductIndex =
         _items.indexWhere((element) => element.id == id);
     var existingProduct = _items.firstWhere((element) => element.id == id);
